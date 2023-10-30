@@ -1,0 +1,34 @@
+Lineas de pedidos --> +Precio
+
+
+Usuarios, Pedidos, Categorias, Productos, LineasPedidos
+
+USUARIOS(id, dni, email, contraseña, nombre, apellidos, rol, telefono, direccion) 
+	PK: id
+	AK: dni
+	AK: email
+	VNN: contraseña, nombre, apellido, rol
+	
+PEDIDOS(id, idUsuario, nombre, apellidos, dni, direccion, precioTotal, fecha)
+	PK: id
+	FK : idUsuario --> USUARIOS
+	VNN: idUsuario, nombre, apellidos, dni, direccion, precioTotal, fecha
+
+CATEGORIAS(id, categoria)
+	PK: id
+	VNN: categoria
+
+PRODUCTOS(id, nombre, precioUnitario, imagen)
+	PK: id
+	VNN: precioUnitario
+
+CATEGORIA_PRODUCTOS(idCategoria, idProducto)
+	PK: idCategoria, idProducto
+	FK: idCategoria --> CATEGORIAS
+	FK: idProducto --> PRODUCTOS
+
+LINEA_PEDIDOS(id, idPedido, idProducto, cantidad, precioLinea)
+	PK: id
+	FK: idProducto --> PRODUCTOS
+	FK: idPedido --> PEDIDOS
+	VNN: idPedido, cantidad, precioLinea

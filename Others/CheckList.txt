@@ -1,0 +1,9 @@
+✔ Consultar productos
+✔ Login de usuario
+✔ Registro de usuarios (opcional: enviar mail de confirmación PHPMailer)
+✔ Consultar productos por categorías, precio, nombre, etc.
+✔ Añadir una o más unidades de un producto al pedido
+✔ Consultar el pedido del carrito y eliminar productos de este
+✔ Zona exclusiva de administradores en la que se pueda añadir productos y categorías, así como modificarlas e incluso borrarlas.
+✔ Realizar un pedido
+✔ Realizar el pedido, introduciéndolo en la BD y (opcional: enviar correo de confirmación)

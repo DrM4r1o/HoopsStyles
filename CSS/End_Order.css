@@ -1,0 +1,82 @@
+
+h1,h3 {
+    text-align: center;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+}
+
+form {
+    position: relative;
+    min-height: 400px;
+    min-width: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 20px;
+    background-color: white;
+    color: black;
+    padding: 10px;
+}
+
+p {
+    margin: 0;
+    padding: 5px;
+}
+
+.confirm, .cancel  {
+    width: 250px;
+    background-color: rgb(255, 255, 255);
+    padding: 6px;
+    border-radius: 5px;
+    color: black;
+    font-size: 1rem;
+    text-align: center;
+    transition: 0.3s;
+    border: none;
+    margin: 10px;
+    
+}
+
+.cancel:hover {
+    background-color: rgb(255, 92, 92);
+    border-color: rgb(255, 92, 92);
+    color: white;
+    border: none;
+}
+
+.confirm:hover {
+    background-color: rgb(101, 219, 96);
+    border-color: rgb(101, 219, 96);
+    color: white;
+    border: none;
+}
+
+.summary {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 20px;
+}
+.price {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 20px;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 420px;
+    margin-top: 40px;
+}

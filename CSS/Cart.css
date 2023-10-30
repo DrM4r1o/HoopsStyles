@@ -1,0 +1,114 @@
+main {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 99vw;
+}
+
+.remove {
+    width: 80%;
+}
+
+.remove, .buy {
+    background-color: rgb(255, 255, 255);
+    padding: 6px;
+    border-radius: 5px;
+    color: black;
+    font-size: 1rem;
+    text-align: center;
+    transition: 0.3s;
+    border: none;
+}
+
+.buy {
+    background-color: #26272b;
+    color: white;
+}
+
+.remove:hover, .buy:hover  {
+    background-color: rgb(255, 92, 92);
+    border-color: rgb(255, 92, 92);
+    color: white;
+    border: none;
+}
+
+.products {
+    min-width: 75%;
+    max-width: 75%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-left: 115px;
+}
+
+.product {
+    width: 300px;
+    height: 400px; 
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-bottom: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.product > img {
+    min-width: 300px;
+    min-height: 400px; 
+}
+
+.price {
+    margin-bottom: 3px;
+}
+
+.quantity {
+    width: 13.5%;
+    padding: 6px;
+    border-radius: 5px;
+    color: black;
+    font-size: 1rem;
+    transition: 0.3s;
+    border: none;
+}
+
+.quantity:hover {
+    background-color: rgb(255, 92, 92);
+    border-color: rgb(255, 92, 92);
+}
+
+.quantity:focus {
+    outline: none;
+}
+
+.disabled {
+    background-color: grey !important;
+    border-color: grey !important;
+    color: white !important;
+    pointer-events: none;
+}
+
+.disabled:hover {
+    background-color: grey !important;
+    border-color: grey !important;
+    color: white !important;
+}
+
+.summary {
+    min-height: 100px;
+    max-height: 140px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: white;
+    border: solid 1px black;
+    border-radius: 20px;
+    color: black;
+    padding: 20px;
+    margin-right: 50px;
+    
+}
+
+h3 {
+    text-align: center;
+}

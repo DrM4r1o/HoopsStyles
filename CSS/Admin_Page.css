@@ -1,0 +1,174 @@
+body {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+}
+
+h1 {
+    text-align: center;
+    border-bottom: 1px solid white;
+}
+
+main {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100%;
+}
+
+input[type="radio"] {
+    appearance: none;
+}
+
+form {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+table {
+    font-size: 0.8rem;
+    border-collapse: collapse;
+}
+
+tr {
+    border: 1px solid rgb(26, 26, 26);
+}
+
+td, th {
+    width: 100px;
+    padding: 5px;
+}
+
+td:last-child, th:last-child {
+    border: 1px solid rgb(26, 26, 26);
+}
+
+th {
+    text-align: left;
+}
+
+input {
+    all: unset;
+}
+
+td > input {
+    width: 90%;
+}
+
+.actions {
+    min-height: 40px;
+    width: 20%;
+    font-size: 1rem;
+    margin-top: 10px;
+    background-color: #26272b;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    transition: 0.2s;
+}
+
+.actions:last-child {
+    margin-bottom: 50px;
+}
+
+.actions:hover {
+    background-color: #5877e0;
+}
+
+.editContainer {
+    width: 10px !important;
+}
+
+.panelOption {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 275px;
+    height: 50px;
+    margin-top: 10px;
+    border-radius: 10px;
+    transition: 0.3s;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.panelOption > img {
+    margin-right: 20px;
+}
+
+
+.panelOption:hover {
+    background-color: rgb(255, 92, 92);
+}
+
+.panelOption:has(input[type="radio"]:checked)  {
+    background-color: rgb(255, 92, 92);
+}
+
+.panelSelector, .panelData {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+}
+
+.panelSelector {
+    max-width: 10%;
+    min-width: 25%;
+    height: 100%;
+    background-color: rgb(12, 11, 11);
+}
+
+.panelData {
+    max-width: 95%;
+    min-width: 95%;
+    height: 95%;
+    background-color: rgb(236, 236, 236);
+    color: rgb(0, 0, 0);
+    border-radius: 10px;
+    overflow: auto;
+}
+
+.edit, .remove {
+    cursor: pointer;
+}
+
+.return {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    margin: 10px;
+    height: 30px;
+    stroke: white;
+}
+
+.removeContainer {
+    width: 10px;
+    transition: 0.2s;
+}
+
+.editContainer {
+    border: 1px solid rgb(26, 26, 26);
+    transition: 0.2s;
+}
+
+.edit:hover {
+    background-color: rgb(55, 185, 175);
+    transition: 0.2s;
+}
+
+.remove {
+    background-image: url("../Others/trash.svg");
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    transition: 0.2s;
+}
+
+.remove:hover {
+    background-color: rgb(204, 64, 75)
+}
