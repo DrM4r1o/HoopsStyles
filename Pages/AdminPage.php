@@ -349,9 +349,15 @@ if(isset($tableName))
                 if(editing)
                 {
                     option.disabled = false;
-                } else {
-                    row.querySelector("select").selectedOptions[0]
-                    option.disabled = true;
+                } else 
+                {
+                    if(row.querySelector("select").selectedOptions[0] == option)
+                    {
+                        option.disabled = false;
+                    } else
+                    {
+                        option.disabled = true;
+                    }
                 }
             }
 
