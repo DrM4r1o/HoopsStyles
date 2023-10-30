@@ -64,7 +64,7 @@ input[type="search"]:focus {
     width: 35px;
 }
 
-#cart {
+#cart, #user {
     position: relative;
 }
 
@@ -81,6 +81,20 @@ input[type="search"]:focus {
     width: 9px;
     height: 9px;
     background-color: rgb(255, 92, 92);
+    border-radius: 50%;
+    padding: 7px;
+    font-size: 0.6rem ;
+    color: white;
+    text-align: center;
+}
+
+#notComplete {
+    position: absolute;
+    top: 8%;
+    right: 6%;
+    width: 9px;
+    height: 9px;
+    background-color: rgb(218, 195, 96);
     border-radius: 50%;
     padding: 7px;
     font-size: 0.6rem ;
