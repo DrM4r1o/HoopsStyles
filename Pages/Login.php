@@ -3,7 +3,7 @@
 
     session_start();
 
-    if(isset($_SESSION["email"])) header ("Location:../Pages/UserProfile.php");
+    if(isset($_SESSION["email"])) header ("Location:./UserProfile.php");
 
     $error = false;
     
