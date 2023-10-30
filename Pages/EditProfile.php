@@ -6,10 +6,10 @@ include "../PHP/DataAccess.php";
 include "../PHP/Header.php";
 
 
-if(!isset($_SESSION["name"])) header("Location:./Login.php");
+if(!isset($_SESSION["email"])) header("Location:./Login.php");
 
 $userEmail = $_SESSION["email"];
-$userName = $_SESSION["name"];
+$userName = isset($_SESSION["name"]) ? $_SESSION["name"] : "";
 
 if(isset($_POST["edit"]))
 {

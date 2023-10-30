@@ -23,3 +23,8 @@ function updateNumberCart($userEmail, $bd)
     $queryUpdateNumCart = "SELECT id FROM order_lines WHERE idOrder = (SELECT id FROM orders WHERE user_id = (SELECT id FROM users WHERE email = '{$userEmail}')) GROUP BY idProduct";
     $_SESSION["num-products-in-cart"] = $bd->query($queryUpdateNumCart)->rowCount();
 }
+
+function userIsComplete($userEmal, $bd)
+{
+    return $bd->query("SELECT complete FROM users WHERE email = '{$userEmal}'")->fetch()["complete"];
+}

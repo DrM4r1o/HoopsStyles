@@ -4,11 +4,12 @@ session_start();
 
 include "../PHP/DataAccess.php";
 include "../PHP/Header.php";
+include "../PHP/Querys.php";
 
 
-if(!isset($_SESSION["name"])) header("Location:./Login.php");
+if(!isset($_SESSION["email"])) header("Location:./Login.php");
 
-$userName = $_SESSION["name"];
+$userName = isset($_SESSION["name"]) ? $_SESSION["name"] : "";
 $userEmail = $_SESSION["email"];
 $userPass = $_SESSION["password"];
 
@@ -51,9 +52,9 @@ $resultLastOrders = $bd->query($queryLastOrders)->fetchAll();
             echo headerNoSearch("..");
         ?>
         <h1>
-            Welcome,
             <?php
-                echo $userName 
+                if($userName == "") echo "Welcome";
+                else echo "Welcome, {$userName}";
             ?> 
         </h1>
         <main>
@@ -76,8 +77,14 @@ $resultLastOrders = $bd->query($queryLastOrders)->fetchAll();
                                     ?>
                                 </span>
                             </p>
-                            <input type="submit" class="login_button" value="Edit profile" name="edit" style="background-color: Black;" />
                             <?php
+                                if(userIsComplete($userEmail, $bd) == 0)
+                                {
+                                    echo "<input type='submit' class='login_button' value='Complete your profile' name='edit' style='background-color: rgb(218, 195, 96);' />";
+                                } else
+                                {
+                                    echo "<input type='submit' class='login_button' value='Edit Profile' name='edit' style='background-color: black' />";
+                                }
                                 if($_SESSION["rol"] == "Admin")
                                 {
                                     echo "<input type='submit' class='login_button' value='Admin page' name='admin' style='background-color: Black;' />";

@@ -5,7 +5,8 @@ $incomplete = "";
 
 if(isset($_SESSION["email"]))
 {
-    $queryNumProductsInCart = "SELECT COUNT(*) FROM order_lines WHERE idOrder = (SELECT id FROM orders WHERE user_id = (SELECT id FROM users WHERE email = '{$_SESSION["email"]}') AND ACTIVE = 1)";
+    $email = $_SESSION["email"];
+    $queryNumProductsInCart = "SELECT COUNT(*) FROM order_lines WHERE idOrder = (SELECT id FROM orders WHERE user_id = (SELECT id FROM users WHERE email = '{$email}') AND ACTIVE = 1)";
     $resultNumProductsInCart = $bd->query($queryNumProductsInCart)->fetch();
     $numProductsInCart = $resultNumProductsInCart[0];
     $userComplete = $bd->query("SELECT complete FROM users WHERE email = '{$email}'")->fetch()["complete"];

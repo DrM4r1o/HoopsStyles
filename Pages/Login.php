@@ -1,4 +1,5 @@
 <?php
+
     include "../PHP/DataAccess.php";
 
     session_start();
@@ -15,7 +16,7 @@
             $inputEmail = $_POST["email"];
             $inputPass = $_POST["password"];
             
-            $query = "SELECT email,password,first_name,role FROM users WHERE email = '{$inputEmail}' AND password ='{$inputPass}'";
+            $query = "SELECT email,password,role FROM users WHERE email = '{$inputEmail}' AND password ='{$inputPass}'";
             $queryData = $bd->query($query)->fetch();
             if(empty($queryData)) $error = true;
             
@@ -23,30 +24,30 @@
             {
                 $_SESSION["email"] = $queryData["email"];
                 $_SESSION["password"] = $queryData["password"];
-                $_SESSION["name"] = $queryData["first_name"];
                 $_SESSION["rol"] = $queryData["role"];
                 header("Location:../index.php");
             }
         }
         if(isset($_POST["submit-register"]))
         {   
-            $queryData;
-            $sent = true;
-            $correctQuery = true;
-
+            $error = true;
+            $inputPass = $_POST["dni"];
             $inputEmail = $_POST["email"];
             $inputPass = $_POST["password"];
             $inputConfirmPass = $_POST["password-confirm"];
-            
-            $bd = new PDO($conexionBD, $user, $password);
-            $query = "INSERT INTO users (id, dni, email, password, first_name, last_name, role, phone_number, address) VALUES ((SELECT create_id_user()),'".$dni."','".$userEmail."','".$userPass."','','','User','','')";
-            
-            try {
-                $correcto = $bd->query($query);
-            } catch (Throwable $th) {
-                throw $th;
+
+            if($inputPass == $inputConfirmPass)
+            {
+                $query = "INSERT INTO users (id, dni, email, password, first_name, last_name, role, phone_number, address) VALUES ((SELECT create_id('{$inputEmail}')),'".$dni."','".$inputEmail."','".$inputPass."','','','User','','')";
+                $bd->query($query);
+                $error = false;
+
+                $_SESSION["email"] = $inputEmail;
+                $_SESSION["password"] = $inputPass;
+
+                header("Location:../index.php");
             }
-            header("Location:/");
+            
         }
     }
 ?>
@@ -67,38 +68,39 @@
         </header>
         <main>
             <div class="principal">
-                <h1>Bienvenido!</h1>
+                <h1>Welcome!</h1>
                 <div id="containerForms">
                     <form action="<?php echo $_SERVER["PHP_SELF"];?>" method="POST">
                         <div class="login forms">
                             <div class="loginData">
-                                <h2>Iniciar Sesión</h2>
-                                <input class="login_user" type="text" label="Usuario" name="email" size="28.5" placeholder="Correo Electronico" required/>
-                                <br><input class="login_user" type="password" name="password" size="28.5" placeholder="Contraseña" required>
+                                <h2>Login</h2>
+                                <input class="login_user" type="text" label="Usuario" name="email" size="28.5" placeholder="Email" required/>
+                                <br><input class="login_user" type="password" name="password" size="28.5" placeholder="Password" required>
                                 <br><div class="keepSession">
                                     <br><input type="checkbox" id="keep" name="logged" checked>
-                                    <br><label class="logged" for="keep">Mantener la sesión</label><br>
+                                    <br><label class="logged" for="keep">Keep session</label><br>
                                 </div>
-                                <br><input type="submit" name="submit-login" class="login_button" value="Continuar"/>
+                                <br><input type="submit" name="submit-login" class="login_button" value="Continue"/>
                             </div>
                             <hr>
                             <div class="changeRegister">
-                                <label class="lablel">¿No tienes cuenta aún?</label>
-                                <br><br><button id="goRegister">Registrate ahora!</label>
+                                <label class="lablel">Don't have an account yet?</label>
+                                <br><br><button id="goRegister">Register now!</label>
                             </div>
                         </div>
                     </form>
                     <form class="defaultHidden" action="<?php echo $_SERVER["PHP_SELF"];?>" method="POST">
                         <div class="register forms">
-                            <h2>Registro</h2>
-                            <input class="register_user" type="text" label="Usuario" name="email" size="28.5" placeholder="Nombre de usuario"/>
-                            <br><input class="register_user" type="password" name="password" size="28.5" placeholder="Contraseña">
-                            <br><input class="register_user" type="password" name="password-confirm" size="28.5" placeholder="Confirmar contraseña"/>
-                            <br><input id="sumbitRegister" type="submit" name="submit-register" value="Confirmar"/>
+                            <h2>Register</h2>
+                            <input class="register_user" type="text" label="Usuario" name="email" size="28.5" placeholder="Email"/>
+                            <br><input class="register_user" type="text" label="DNI" name="dni" size="28.5" placeholder="DNI"/>
+                            <br><input class="register_user" type="password" name="password" size="28.5" placeholder="Passworrd">
+                            <br><input class="register_user" type="password" name="password-confirm" size="28.5" placeholder="Confirm password"/>
+                            <br><input id="sumbitRegister" type="submit" name="submit-register" value="Confirm"/>
                             <hr>
                             <div class="changeLogin">
-                                <label class="lablel">¿Ya tienes cuenta? Inicia Sesión</label>
-                                <br><button id="returnLogin">Volver</button>
+                                <label class="lablel">Do you already have an account? Login</label>
+                                <br><button id="returnLogin">Return</button>
                             </div>
                         </div>
                     </form>
