@@ -1,15 +1,22 @@
 <?php
 
 $numProductsInCart = 0;
+$incomplete = "";
 
 if(isset($_SESSION["email"]))
 {
     $queryNumProductsInCart = "SELECT COUNT(*) FROM order_lines WHERE idOrder = (SELECT id FROM orders WHERE user_id = (SELECT id FROM users WHERE email = '{$_SESSION["email"]}') AND ACTIVE = 1)";
     $resultNumProductsInCart = $bd->query($queryNumProductsInCart)->fetch();
     $numProductsInCart = $resultNumProductsInCart[0];
+    $userComplete = $bd->query("SELECT complete FROM users WHERE email = '{$email}'")->fetch()["complete"];
+    if($userComplete == 0)
+    {
+        $incomplete = " <span id='notComplete'>!</span>";
+    }
 }
 
 $_SESSION["num-products-in-cart"] = $numProductsInCart;
+$_SESSION["incomplete"] = $incomplete;
 
 function mainHeader() {
     return 
@@ -28,8 +35,9 @@ function mainHeader() {
                 <span id='numberCart'> {$_SESSION["num-products-in-cart"]} </span>
             </div>
             <a href='./'>All Products</a>
-            <a href='./Pages/Login.php'>
+            <a id='user' href='./Pages/UserProfile.php'>
                 <img id='userImg' src='./Others/User.png' alt=''>
+                {$_SESSION["incomplete"]}
             </a>
         </div>
     </header>
@@ -45,11 +53,11 @@ function headerNoSearch($posIndex) {
             <div id='searchBar'>
             </div>
             <div id='cart'>
-                <a href='".$posIndex."/Pages/Cart.php'><img id='cartImg' src='".$posIndex."/Others/Cart.png' alt='cart'></a>
+                <a href='".$posIndex."/Pages/Cart.php' alt='cart'><img id='cartImg' src='".$posIndex."/Others/Cart.png' alt='cart'></a>
                 <span id='numberCart'> {$_SESSION["num-products-in-cart"]} </span>
             </div>
             <a href='".$posIndex."/'>All Products</a>
-            <a href='".$posIndex."/Pages/Login.php'>
+            <a href='".$posIndex."/Pages/UserProfile.php'>
                 <img id='userImg' src='".$posIndex."/Others/User.png' alt=''>
             </a>
         </div>
@@ -68,7 +76,7 @@ function headerNoCart($posIndex) {
             <div id='cart'>
             </div>
             <a href='".$posIndex."/'>All Products</a>
-            <a href='".$posIndex."/Pages/Login.php'>
+            <a href='".$posIndex."/Pages/UserProfile.php'>
                 <img id='userImg' src='".$posIndex."/Others/User.png' alt=''>
             </a>
         </div>
