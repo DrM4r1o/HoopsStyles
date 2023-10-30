@@ -8,21 +8,31 @@ include "../PHP/Header.php";
 
 if(!isset($_SESSION["name"])) header("Location:./Login.php");
 
+$userEmail = $_SESSION["email"];
+$userName = $_SESSION["name"];
+
+if(isset($_POST["edit"]))
+{
+    $actualPassword = $bd->query("SELECT password FROM users WHERE email = '{$userEmail}'")->fetch()["password"];
+    if($_POST["password"] === "") $_POST["password"] = $actualPassword;
+
+    $complete = "1";
+    if($_POST["name"] === "" || $_POST["lastname"] === "" || $_POST["email"] === "" || $_POST["password"] === "" || $_POST["phone"] === "" || $_POST["address"] === "")
+    {
+        $complete = "0";
+    }
+
+    $queryUpdate = "UPDATE users SET first_name = '{$_POST["name"]}', email = '{$_POST["email"]}', last_name = '{$_POST["lastname"]}', phone_number = '{$_POST["phone"]}', address = '{$_POST["address"]}', password = '{$_POST["password"]}', complete = {$complete} WHERE email = '{$userEmail}'";
+    $bd->query($queryUpdate);
+    $_SESSION["email"] = $_POST["email"];
+    $_SESSION["name"] = $_POST["name"];
+    header("Location:UserProfile.php");
+}
+
 $userData = $bd->query("SELECT * FROM users WHERE email = '{$_SESSION["email"]}'")->fetch();
 
 $userName = $userData["first_name"];
-// $userEmail = $_SESSION["email"];
-// $userPass = $_SESSION["password"];
 
-if(isset($_POST["confirm"]))
-{
-    $queryUpdate = "UPDATE users SET name = '{$_POST["name"]}', email = '{$_POST["email"]}', password = '{$_POST["password"]}' WHERE email = '{$userEmail}'";
-    $bd->query($queryUpdate);
-    $_SESSION["name"] = $_POST["name"];
-    $_SESSION["email"] = $_POST["email"];
-    $_SESSION["password"] = $_POST["password"];
-    header("Location:UserProfile.php");
-}
 
 
 ?>
@@ -50,21 +60,21 @@ if(isset($_POST["confirm"]))
                         <h2>Edit profile</h2>
                         <div class="data">
                             <div class="dataInput">
-                                <input type="text" name="user-name" value="<?php echo $userData["first_name"] ?>" placeholder="Name">
+                                <input type="text" name="name" value="<?php echo $userData["first_name"] ?>" placeholder="Name">
                                 <img src="../Others/IconsEdit/name.svg" alt="name">
                             </div>
                             <img class="alert" src="../Others/IconsEdit/alert-triangle.svg" alt="name">
                         </div>
                         <div class="data">
                             <div class="dataInput">
-                                <input type="text" name="user-lastname" value="<?php echo $userData["last_name"] ?>"  placeholder="Last Name">
+                                <input type="text" name="lastname" value="<?php echo $userData["last_name"] ?>"  placeholder="Last Name">
                                 <img src="../Others/IconsEdit/last_name.svg" alt="lastname">
                             </div>
                             <img class="alert" src="../Others/IconsEdit/alert-triangle.svg" alt="name">
                         </div>
                         <div class="data">
                             <div class="dataInput">
-                                <input type="text" name="user-email" value="<?php echo $userData["email"] ?>" placeholder="Email">
+                                <input type="text" name="email" value="<?php echo $userData["email"] ?>" placeholder="Email">
                                 <img src="../Others/IconsEdit/inbox.svg" alt="email">
                             </div>
                             <img class="alert" src="../Others/IconsEdit/alert-triangle.svg" alt="name">
@@ -78,19 +88,19 @@ if(isset($_POST["confirm"]))
                         </div>
                         <div class="data">
                             <div class="dataInput">
-                                <input type="text" name="user-phone" value="<?php echo $userData["phone_number"] ?>"  placeholder="Phone Number">
+                                <input type="text" name="phone" value="<?php echo $userData["phone_number"] ?>"  placeholder="Phone Number">
                                 <img src="../Others/IconsEdit/phone.svg" alt="phone">
                             </div>
                             <img class="alert" src="../Others/IconsEdit/alert-triangle.svg" alt="name">
                         </div>
                         <div class="data">
                             <div class="dataInput">
-                                <input type="text" name="user-direction" value="<?php echo $userData["address"] ?>"  placeholder="Address">
+                                <input type="text" name="address" value="<?php echo $userData["address"] ?>"  placeholder="Address">
                                 <img src="../Others/IconsEdit/home.svg" alt="address">
                             </div>
                             <img class="alert" src="../Others/IconsEdit/alert-triangle.svg" alt="name">
                         </div>
-                        <input class="confirm" type="text" value="Confirm" name="edit"/>
+                        <button class="confirm" type="submit" value="Confirm" name="edit">Confirm</button>
                     </div>
                 </div>
                 <img class="return" src="../Others/return.svg" alt="">
