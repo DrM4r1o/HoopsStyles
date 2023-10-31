@@ -54,6 +54,29 @@ input {
     all: unset;
 }
 
+input[type="file"] {
+    width: 105%;
+}
+
+input[type="file"]::file-selector-button {
+    background-color: rgb(26, 26, 26);
+    color: white;
+    border-radius: 5px;
+    padding: 5px;
+    border: none;
+    width: 100px;
+    transition: 0.2s;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background-color: rgb(255, 92, 92);
+}
+
+.editable[type="text"]:focus {
+    border: 2px solid rgb(109, 109, 252);
+    border-radius: 5px;
+}
+
 td > input {
     width: 90%;
 }
@@ -180,3 +203,6 @@ td > input {
     background-color: rgb(211, 211, 211);
 }
 
+.inserted::file-selector-button {
+    background-color: rgb(91, 189, 88) !important;
+}

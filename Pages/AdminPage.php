@@ -10,7 +10,6 @@ if($_SESSION["rol"] != "Admin") header ("Location:./UserProfile.php");
 
 $userName = $_SESSION["name"];
 $userEmail = $_SESSION["email"];
-$userPass = $_SESSION["password"];
 
 $text = "No option selected";
 
@@ -54,6 +53,14 @@ if(isset($_GET["element"]))
 
             $bd->query("DELETE FROM product_category WHERE idProduct = '{$idProduct}' AND idCategory = '{$oldCategory["idCategory"]}'");
             $bd->query("INSERT INTO product_category VALUES('{$idCategory["id"]}', '{$idProduct}')");
+
+            if($_GET["image"][$i / $sum - 1] != null)
+            {
+                $nameCategory = $bd->query("SELECT category FROM categories WHERE id = '{$idCategory["id"]}'")->fetch()["category"];
+                $imageRoute = "./Products/{$nameCategory}/{$_GET["image"][$i / $sum - 1]}";
+                move_uploaded_file(($_GET["image"][$i / $sum - 1]), $imageRoute);
+                $bd->query("UPDATE products SET image = '{$imageRoute}' WHERE id = '{$idProduct}'");
+            }
         }
 
     } while ($i < count($_GET["element"]));
@@ -164,6 +171,7 @@ if(isset($tableName))
                                 echo "
                                 <td class='imageContainer'>
                                     <img class='image' src='.{$row["image"]}' alt='productImage'>
+                                    <input type='file' id='changeImage' name='image[]' title=' ' accept='image/png, image/jpeg, image/webp' />
                                 </td>   
                                 ";
                             }
@@ -218,6 +226,7 @@ if(isset($tableName))
         const add = document.querySelector("#add");
         const returnButton = document.querySelector(".return");
         const buttonSubmit = document.querySelector("#submit");
+        const inputImages = document.querySelectorAll("input[type=file]");
         let editing = false;
 
         if(buttonSubmit != null)
@@ -244,6 +253,12 @@ if(isset($tableName))
 
         returnButton.addEventListener("click", () => {
             window.location.href = "./UserProfile.php";
+        });
+
+        inputImages.forEach((input) => {
+            input.addEventListener("change", (e) => {
+                e.target.classList.add("inserted");
+            });
         });
 
         if(add != null)
@@ -335,20 +350,20 @@ if(isset($tableName))
             const tableName = "<?php if(isset($tableName)) {echo $tableName;} else {echo '';} ?>";
             if(tableName == "Products")
             {
-                <?php echo "invertInputsProducts(row[0].parentElement.parentElement);"; ?>
-            } else {
-                let j = 0;
-                for (let i = 0; i < row.length; i++) {
-                    const input = row[i];
-                    if (i > 0)
-                    {
-                        input.readOnly = input.readOnly ? false : true;
-                    }
+                <?php echo "invertOptionsProducts(row[0].parentElement.parentElement);"; ?>
+            }
+            for (let i = 0; i < row.length; i++) {
+                const input = row[i];
+                if (i > 0)
+                {   
+                    input.classList = "";
+                    input.readOnly = input.readOnly ? false : true;
+                    input.classList.add(input.readOnly ? "readOnly" : "editable");
                 }
             }
         }
 
-        function invertInputsProducts(row)
+        function invertOptionsProducts(row)
         {
             const options = row.querySelectorAll("option");
             for (let i = 0; i < options.length; i++) {
@@ -365,16 +380,6 @@ if(isset($tableName))
                     {
                         option.disabled = true;
                     }
-                }
-            }
-
-            row = row.querySelectorAll("input");
-            let j = 0;
-            for (let i = 0; i < row.length; i++) {
-                const input = row[i];
-                if (i > 0)
-                {
-                    input.readOnly = input.readOnly ? false : true;
                 }
             }
         }

@@ -23,14 +23,18 @@ if(isset($_GET["remove"]))
 
 if(isset($_GET["products"]) && !isset($_GET["remove"]))
 {
-    foreach ($_GET["products"] as $productId) {
-        $idOrderQuery = "SELECT id FROM orders WHERE user_id = (SELECT id FROM users WHERE email = '{$email}') AND active = 1";
-        $idOrder = $bd->query($idOrderQuery)->fetch()["id"];
-        $query = "UPDATE order_lines SET quantity = '{$_GET["quantity".$productId]}', linePrice = ((SELECT unit_price FROM PRODUCTS WHERE id = '{$productId}') * {$_GET["quantity".$productId]}) WHERE idOrder = '{$idOrder}' AND idProduct = '{$productId}'";
-        $bd->query($query);
+    if(userIsComplete($email, $bd) == "1")
+    {
+        foreach ($_GET["products"] as $productId) {
+            $idOrderQuery = "SELECT id FROM orders WHERE user_id = (SELECT id FROM users WHERE email = '{$email}') AND active = 1";
+            $idOrder = $bd->query($idOrderQuery)->fetch()["id"];
+            $query = "UPDATE order_lines SET quantity = '{$_GET["quantity".$productId]}', linePrice = ((SELECT unit_price FROM PRODUCTS WHERE id = '{$productId}') * {$_GET["quantity".$productId]}) WHERE idOrder = '{$idOrder}' AND idProduct = '{$productId}'";
+            $bd->query($query);
+        }
+        $_SESSION["end-order"] = true;
+        header ("Location:../Pages/EndOrder.php");
     }
-    $_SESSION["end-order"] = true;
-    header ("Location:../Pages/EndOrder.php");
+    $incompleteProfile = "<span style='color: rgb(218, 195, 96); font-size: 0.85rem; font-weight: bold;'>Complete your profile to finish the order</span>";
 }
 
 $productsInCart = $bd->query(
@@ -84,6 +88,9 @@ $productsInCart = $bd->query(
             <div class="summary">
                 <h3>Finish Order</h3>
                 <button class='buy' type='submit' name='buy' value='buy'>Proceed to payment</button>
+                <?php
+                    if(isset($incompleteProfile)) echo $incompleteProfile;
+                ?>
             </div>
         </main>
     </body>

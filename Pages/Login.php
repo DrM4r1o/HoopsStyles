@@ -16,14 +16,14 @@
             $inputEmail = $_POST["email"];
             $inputPass = $_POST["password"];
             
-            $query = "SELECT email,password,role FROM users WHERE email = '{$inputEmail}' AND password ='{$inputPass}'";
+            $query = "SELECT email,first_name,role FROM users WHERE email = '{$inputEmail}' AND password ='{$inputPass}'";
             $queryData = $bd->query($query)->fetch();
             if(empty($queryData)) $error = true;
             
             if(!$error)
             {
                 $_SESSION["email"] = $queryData["email"];
-                $_SESSION["password"] = $queryData["password"];
+                $_SESSION["name"] = $queryData["first_name"];
                 $_SESSION["rol"] = $queryData["role"];
                 header("Location:../index.php");
             }
@@ -43,7 +43,8 @@
                 $error = false;
 
                 $_SESSION["email"] = $inputEmail;
-                $_SESSION["password"] = $inputPass;
+                $_SESSION["name"] = $queryData["first_name"];
+                $_SESSION["rol"] = "User";
 
                 header("Location:../index.php");
             }

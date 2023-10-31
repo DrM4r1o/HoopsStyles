@@ -11,7 +11,7 @@ if(!isset($_SESSION["email"])) header("Location:./Login.php");
 
 $userName = isset($_SESSION["name"]) ? $_SESSION["name"] : "";
 $userEmail = $_SESSION["email"];
-$userPass = $_SESSION["password"];
+$userPass = $bd->query("SELECT password FROM users WHERE email = '{$userEmail}'")->fetch()["password"];
 
 if(isset($_POST["logout"]))
 {
