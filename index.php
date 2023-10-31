@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         <meta charset="UTF-8">
         <meta name="description" content="">
         <meta name="author" content="Mario Esparza">
-        <link rel="shortcut icon" href="./Others/Icon.png" type="image/x-icon">
+        <link rel="shortcut icon" href="../Others/Icon.png" type="image/x-icon">
         <link href="./CSS/Header.css" rel="stylesheet" media="all" type="text/css"/>
         <link href="./CSS/Products.css" rel="stylesheet" media="all" type="text/css"/>
     </head>
@@ -243,6 +243,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
                 }
             }
 
+
+            if (document.startViewTransition) {
+            window.navigation.addEventListener("navigate", (e) => {
+                const toUrl = new URL(e.destination.url);
+                
+                if(location.origin != toUrl.origin) return;
+    
+                e.intercept({
+                    async handler() {
+                        const response = await fetch(toUrl.pathname);
+                        const html = await response.text();
+                        console.log(html);
+    
+                        document.startViewTransition(() => {
+                            document.body.innerHTML = html;
+                        });
+                    }
+                });
+            });
+        }
         </script>
     </body>
 </html>

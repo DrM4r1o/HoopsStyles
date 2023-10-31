@@ -156,11 +156,6 @@ td > input {
     transition: 0.2s;
 }
 
-.edit:hover {
-    background-color: rgb(55, 185, 175);
-    transition: 0.2s;
-}
-
 .remove {
     background-image: url("../Others/trash.svg");
     background-size: cover;
@@ -169,6 +164,19 @@ td > input {
     transition: 0.2s;
 }
 
-.remove:hover {
-    background-color: rgb(204, 64, 75)
+.image {
+    width: 100px;
+    height: 100px;
 }
+
+.edit {
+    height: 30px;
+    transition: 0.3s;
+    border: none;
+    box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.75);
+}
+
+.edit:hover {
+    background-color: rgb(211, 211, 211);
+}
+

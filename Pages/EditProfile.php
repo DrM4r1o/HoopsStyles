@@ -14,15 +14,15 @@ $userName = isset($_SESSION["name"]) ? $_SESSION["name"] : "";
 if(isset($_POST["edit"]))
 {
     $actualPassword = $bd->query("SELECT password FROM users WHERE email = '{$userEmail}'")->fetch()["password"];
-    if($_POST["password"] === "") $_POST["password"] = $actualPassword;
+    if($_POST["user-pass"] === "") $_POST["user-pass"] = $actualPassword;
 
     $complete = "1";
-    if($_POST["name"] === "" || $_POST["lastname"] === "" || $_POST["email"] === "" || $_POST["password"] === "" || $_POST["phone"] === "" || $_POST["address"] === "")
+    if($_POST["name"] === "" || $_POST["lastname"] === "" || $_POST["email"] === "" || $_POST["user-pass"] === "" || $_POST["phone"] === "" || $_POST["address"] === "")
     {
         $complete = "0";
     }
 
-    $queryUpdate = "UPDATE users SET first_name = '{$_POST["name"]}', email = '{$_POST["email"]}', last_name = '{$_POST["lastname"]}', phone_number = '{$_POST["phone"]}', address = '{$_POST["address"]}', password = '{$_POST["password"]}', complete = {$complete} WHERE email = '{$userEmail}'";
+    $queryUpdate = "UPDATE users SET first_name = '{$_POST["name"]}', email = '{$_POST["email"]}', last_name = '{$_POST["lastname"]}', phone_number = '{$_POST["phone"]}', address = '{$_POST["address"]}', password = '{$_POST["user-pass"]}', complete = {$complete} WHERE email = '{$userEmail}'";
     $bd->query($queryUpdate);
     $_SESSION["email"] = $_POST["email"];
     $_SESSION["name"] = $_POST["name"];
@@ -103,7 +103,7 @@ $userName = $userData["first_name"];
                         <button class="confirm" type="submit" value="Confirm" name="edit">Confirm</button>
                     </div>
                 </div>
-                <img class="return" src="../Others/return.svg" alt="">
+                <a href="./UserProfile.php"><img class="return" src="../Others/return.svg" alt=""></a>
             </form>
         </main>
     </body>
@@ -119,10 +119,6 @@ $userName = $userData["first_name"];
                 inputs[i].parentElement.parentElement.querySelector(".alert").src = "../Others/IconsEdit/check.svg";
             }
         }
-
-        returnButton.addEventListener("click", () => {
-            window.location.href = "./UserProfile.php";
-        });
 
         passwordImg.addEventListener("click", () => {
             const passwordInput = document.querySelector(".password");

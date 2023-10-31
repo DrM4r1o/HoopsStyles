@@ -252,3 +252,24 @@ th,td {
     border: solid 1px;
     padding: 5px;
 }
+
+.redirect {
+    font-family: 'Open Sans', sans-serif;
+    padding: 5px;
+    background-color: #070a0d;
+    border: 2px solid rgba(233, 226, 226, 0.075);
+    border-radius: 3px;
+    cursor: pointer;
+    color: white;
+    font-size: 1rem;
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.redirect:hover {
+    background-color: #4b64f2 !important;
+    transition: background-color 0.15s linear;
+    color: white;
+}

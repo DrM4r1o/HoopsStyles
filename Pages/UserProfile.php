@@ -20,16 +20,6 @@ if(isset($_POST["logout"]))
     header("Location:../index.php");
 }
 
-if(isset($_POST["admin"]))
-{
-    header("Location:AdminPage.php");
-}
-
-if(isset($_POST["edit"]))
-{
-    header("Location:EditProfile.php");
-}
-
 $queryLastOrders = "SELECT id FROM orders WHERE user_id = (SELECT id FROM users WHERE email = '{$userEmail}') AND active = 0 ORDER BY id DESC LIMIT 3";
 $resultLastOrders = $bd->query($queryLastOrders)->fetchAll();
 
@@ -43,6 +33,7 @@ $resultLastOrders = $bd->query($queryLastOrders)->fetchAll();
         <meta charset="UTF-8">
         <meta name="description" content="Profile">
         <meta name="author" content="Mario Esparza">
+        <meta name="view-transition" content="same-origin">
         <link rel="shortcut icon" href="../Others/Icon.png" type="image/x-icon">
         <link href="../CSS/Login_Success.css" rel="stylesheet" media="all" type="text/css"/>
         <link href="../CSS/Header.css" rel="stylesheet" media="all" type="text/css"/>
@@ -80,14 +71,14 @@ $resultLastOrders = $bd->query($queryLastOrders)->fetchAll();
                             <?php
                                 if(userIsComplete($userEmail, $bd) == 0)
                                 {
-                                    echo "<input type='submit' class='login_button' value='Complete your profile' name='edit' style='background-color: rgb(218, 195, 96);' />";
+                                    echo "<a href='EditProfile.php' class='login_button redirect' style='background-color: rgb(218, 195, 96);'>Complete your profile</a>";
                                 } else
                                 {
-                                    echo "<input type='submit' class='login_button' value='Edit Profile' name='edit' style='background-color: black' />";
+                                    echo "<a href='EditProfile.php' class='login_button redirect' style='background-color: black;'>Edit Profile</a>";
                                 }
                                 if($_SESSION["rol"] == "Admin")
                                 {
-                                    echo "<input type='submit' class='login_button' value='Admin page' name='admin' style='background-color: Black;' />";
+                                    echo "<a href='AdminPage.php' class='login_button redirect' style='background-color: black;'>Admin page</a>";
                                 }
                             ?>
                             <input type="submit" class="login_button" value="Logout" name="logout" style="background-color: red !important;" />
@@ -132,3 +123,23 @@ $resultLastOrders = $bd->query($queryLastOrders)->fetchAll();
                         </div>
                     </div>
                 </form>
+            </div>
+        </main>
+    </body>
+    <script>
+        const edit = document.getElementById("edit");
+        const admin = document.getElementById("admin");
+        const buttons = [edit, admin];
+        buttons.forEach(button => {
+            button.addEventListener("click", () => {
+                if(button.value == "Complete your profile" || button.value == "Edit Profile")
+                {
+                    window.navigation.navigate("EditProfile.php");
+                } else if(button.value == "Admin page")
+                {
+                    window.navigation.navigate("AdminPage.php");
+                }
+            });
+        });
+    </script>
+</html>

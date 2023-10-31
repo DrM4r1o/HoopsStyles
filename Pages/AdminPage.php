@@ -144,6 +144,7 @@ if(isset($tableName))
                         echo "<form id='data' action='{$_SERVER["PHP_SELF"]}' method='GET'>";
                         echo "<table>";
                         echo "<tr>";
+                        if($tableName == "Products") echo "<th class='imageContainer'></th>";
                         foreach($data[0] as $key => $value)
                         {
                             echo "<th>$key</th>";
@@ -158,10 +159,16 @@ if(isset($tableName))
                         foreach($data as $row)
                         {
                             echo "<tr>";
+                            if($tableName == "Products")
+                            {
+                                echo "
+                                <td class='imageContainer'>
+                                    <img class='image' src='.{$row["image"]}' alt='productImage'>
+                                </td>   
+                                ";
+                            }
                             foreach($row as $key => $value)
                             {
-                                // if($key == "complete" && $value == "1") $value = "true";
-                                // if($key == "complete" && $value == "0") $value = "false";
                                 echo "<td><input type='text' name='element[]' value='$value' readOnly='true'></td>";
                             }
                             if($tableName == "Products")
@@ -201,7 +208,7 @@ if(isset($tableName))
                 ?>
             </div>
         </main>
-        <img class="return" src="../Others/return_white.svg" alt="">
+        <a href="./UserProfile.php"><img class="return" src="../Others/return_white.svg" alt=""></a>
     </body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.10.1/sha256.min.js" integrity="sha512-wyQ8L68oINPpa6L8GkJbnEQNGRWEgcvCIDKzwQpSQAR1etTNtgKDC3vL3DnXczYA3ijrO0kc6bhW57m0Vu+u0g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.10.1/sha256.js" integrity="sha512-I10uxz+ewyO4jNEzkfqqBbhmUX1gAaL1NVIu1Ki+emGuoMjULGyzJnBolDVqV0WbQzVLjT8Ji5Q708qaQIwNPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
