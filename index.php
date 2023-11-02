@@ -244,25 +244,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
             }
 
 
-            if (document.startViewTransition) {
-            window.navigation.addEventListener("navigate", (e) => {
-                const toUrl = new URL(e.destination.url);
-                
-                if(location.origin != toUrl.origin) return;
-    
-                e.intercept({
-                    async handler() {
-                        const response = await fetch(toUrl.pathname);
-                        const html = await response.text();
-                        console.log(html);
-    
-                        document.startViewTransition(() => {
-                            document.body.innerHTML = html;
-                        });
-                    }
-                });
-            });
-        }
+            // if (document.startViewTransition) {
+            //     window.navigation.addEventListener("navigate", (e) => {
+            //         const toUrl = new URL(e.destination.url);
+                    
+            //         if(location.origin != toUrl.origin) return;
+        
+            //         e.intercept({
+            //             async handler() {
+            //                 const response = await fetch(toUrl.pathname);
+            //                 const html = await response.text();
+            //                 console.log(html);
+        
+            //                 document.startViewTransition(() => {
+            //                     document.body.innerHTML = html;
+            //                 });
+            //             }
+            //         });
+            //     });
+            // };
         </script>
     </body>
 </html>

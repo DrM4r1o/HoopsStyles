@@ -16,13 +16,13 @@ $text = "No option selected";
 $numElement = 0;
 $elemetsAdded = isset($_SESSION["elm-add"]) ? $_SESSION["elm-add"] : false;
 
-if(isset($_GET["categories"])) $tableName = $_GET["categories"];
-if(isset($_GET["products"])) $tableName = $_GET["products"];
-if(isset($_GET["users"])) $tableName = $_GET["users"];
+if(isset($_POST["categories"])) $tableName = $_POST["categories"];
+if(isset($_POST["products"])) $tableName = $_POST["products"];
+if(isset($_POST["users"])) $tableName = $_POST["users"];
 
-if(isset($_GET["tableName"])) $tableName = $_GET["tableName"];
+if(isset($_POST["tableName"])) $tableName = $_POST["tableName"];
 
-if(isset($_GET["element"]))
+if(isset($_POST["element"]))
 {
     $sum = 0;
     if ($tableName == "Categories") $sum = 2;
@@ -30,16 +30,17 @@ if(isset($_GET["element"]))
     if ($tableName == "Users") $sum = 10;
 
     $i = 0;
-    do {
+    do {      
+        print_r($_FILES["image"]["name"]);
         $idProduct = "";
         $names = $bd->query("DESCRIBE {$tableName}")->fetchAll(PDO::FETCH_COLUMN);
         $queryUpdate = "UPDATE {$tableName} SET ";
         for ($j = 0; $j < $sum; $j++)
         {
-            if($j == 0) $idProduct = $_GET["element"][$i];
+            if($j == 0) $idProduct = $_POST["element"][$i];
             else {
                 if ($j > 1) $queryUpdate .= ", ";
-                $queryUpdate .= "{$names[$j]} = '{$_GET["element"][$i]}'";
+                $queryUpdate .= "{$names[$j]} = '{$_POST["element"][$i]}'";
             }
             $i++;
         }
@@ -48,25 +49,25 @@ if(isset($_GET["element"]))
 
         if($tableName == "Products")
         {
-            $idCategory = $bd->query("SELECT id FROM categories WHERE category = '{$_GET["category"][$i / $sum - 1]}'")->fetch();
+            $idCategory = $bd->query("SELECT id FROM categories WHERE category = '{$_POST["category"][$i / $sum - 1]}'")->fetch();
             $oldCategory = $bd->query("SELECT idCategory FROM product_category WHERE idProduct = '{$idProduct}'")->fetch();
 
             $bd->query("DELETE FROM product_category WHERE idProduct = '{$idProduct}' AND idCategory = '{$oldCategory["idCategory"]}'");
             $bd->query("INSERT INTO product_category VALUES('{$idCategory["id"]}', '{$idProduct}')");
 
-            if($_GET["image"][$i / $sum - 1] != null)
+            if(isset($_FILES["image"]["name"][$i / $sum - 1]))
             {
                 $nameCategory = $bd->query("SELECT category FROM categories WHERE id = '{$idCategory["id"]}'")->fetch()["category"];
-                $imageRoute = "./Products/{$nameCategory}/{$_GET["image"][$i / $sum - 1]}";
-                move_uploaded_file(($_GET["image"][$i / $sum - 1]), $imageRoute);
+                $imageRoute = "./Products/{$nameCategory}/{$_FILES["image"]["name"][$i / $sum - 1]}";
+                move_uploaded_file(($_FILES["image"]["tmp_name"][$i / $sum - 1]), ".{$imageRoute}");
                 $bd->query("UPDATE products SET image = '{$imageRoute}' WHERE id = '{$idProduct}'");
             }
         }
 
-    } while ($i < count($_GET["element"]));
+    } while ($i < count($_POST["element"]));
 }
 
-if(isset($_GET["newElement"]))
+if(isset($_POST["newElement"]))
 {
     $i = 0;
     $sum = 0;
@@ -78,26 +79,26 @@ if(isset($_GET["newElement"]))
         $queryInsert = "INSERT INTO $tableName VALUES(";
         for ($j = 0; $j < $sum; $j++)
         {
-            $queryInsert .= "'".$_GET["newElement"][$j]."'";
+            $queryInsert .= "'".$_POST["newElement"][$j]."'";
             if ($i != $sum - 1) $queryInsert .= ",";
             $i++;
         }
         $queryInsert .= ")";
         $bd->query($queryInsert);
-    } while ($i < count($_GET["newElement"]));
+    } while ($i < count($_POST["newElement"]));
 }
 
-if(isset($_GET["remove"]))
+if(isset($_POST["remove"]))
 {
-    $tableName = $_GET["tableName"];
+    $tableName = $_POST["tableName"];
     $tableQuery = $tableName;
     if($tableName == "Categories" || $tableName == "Products") 
     {
         if($tableName == "Categories") $tablePC = "Category";
         if($tableName == "Products") $tablePC = "Product";
-        $bd->query("DELETE FROM product_category WHERE id{$tablePC} = '{$_GET["remove"]}'");
+        $bd->query("DELETE FROM product_category WHERE id{$tablePC} = '{$_POST["remove"]}'");
     }
-    $queryDelete = "DELETE FROM $tableName WHERE id = '{$_GET["remove"]}'";
+    $queryDelete = "DELETE FROM $tableName WHERE id = '{$_POST["remove"]}'";
     $bd->query($queryDelete);
 }
 
@@ -124,7 +125,7 @@ if(isset($tableName))
     <body>
         <div class="panelSelector">
             <h1 style="color: black;"><a class='nombreLogo' href='../index.php' >HoopsStyle</a></h1>
-            <form action="<?php echo $_SERVER["PHP_SELF"];?>" method="GET">
+            <form action="<?php echo $_SERVER["PHP_SELF"];?>" method="POST">
                 <label class='panelOption'>
                     <img src="../Others/category.svg" alt="categories"></img>
                     <input type="radio" value="categories" name="categories"/>
@@ -148,7 +149,7 @@ if(isset($tableName))
                 <?php
                     if(isset($data))
                     {
-                        echo "<form id='data' action='{$_SERVER["PHP_SELF"]}' method='GET'>";
+                        echo "<form id='data' action='{$_SERVER["PHP_SELF"]}' method='POST' enctype='multipart/form-data'>";
                         echo "<table>";
                         echo "<tr>";
                         if($tableName == "Products") echo "<th class='imageContainer'></th>";
@@ -171,7 +172,7 @@ if(isset($tableName))
                                 echo "
                                 <td class='imageContainer'>
                                     <img class='image' src='.{$row["image"]}' alt='productImage'>
-                                    <input type='file' id='changeImage' name='image[]' title=' ' accept='image/png, image/jpeg, image/webp' />
+                                    <input type='file' id='changeImage' name='image' title=' ' accept='image/png, image/jpeg, i mage/webp' />
                                 </td>   
                                 ";
                             }
@@ -265,6 +266,7 @@ if(isset($tableName))
         {
             add.addEventListener("click", (e) => {
                 e.preventDefault();
+                const tableName = "<?php if(isset($tableName)) {echo $tableName;} else {echo '';} ?>";
                 const table = document.querySelector("table");
                 const lastRowNameCell = table.rows[table.rows.length - 1].cells[1].querySelector("input").value;
                 if(!editing && lastRowNameCell != "")
@@ -274,6 +276,15 @@ if(isset($tableName))
                     for(let i = 0; i < table.rows[0].cells.length; i++)
                     {
                         let newCell = document.createElement("td");
+                        if(tableName == "Products" && i == 0)
+                        {
+                            const newInput = document.createElement("input");
+                            newInput.type = "file";
+                            newInput.name = "image[]";
+                            newInput.title = " ";
+                            newInput.accept = "image/png, image/jpeg, image/webp";
+                            newCell.appendChild(newInput);
+                        }
                         if(i == (table.rows[0].cells.length - 2))
                         {
                             newRow.appendChild(addElements("editContainer", ["edit", "save"], "../Others/save.svg", "edit", true));
