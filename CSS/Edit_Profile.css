@@ -12,6 +12,7 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 
 form {
@@ -97,4 +98,14 @@ div > img {
 
 .alert {
     border: none;
+}
+
+.error {
+    border-color: red;
+}
+
+.errorRegister {
+    color: rgb(255, 36, 36);
+    font-size: 0.9rem;
+    margin-top: 10px;
 }

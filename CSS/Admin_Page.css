@@ -22,6 +22,10 @@ input[type="radio"] {
     appearance: none;
 }
 
+input[type="text"] {
+    padding: 5px;
+}
+
 form {
     display: flex;
     justify-content: center;
@@ -75,6 +79,11 @@ input[type="file"]::file-selector-button:hover {
 .editable[type="text"]:focus {
     border: 2px solid rgb(109, 109, 252);
     border-radius: 5px;
+}
+
+.newAdded {
+    border-radius: 5px;
+    border: 2px solid rgb(109, 109, 252) !important;
 }
 
 td > input {

@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         <meta charset="UTF-8">
         <meta name="description" content="">
         <meta name="author" content="Mario Esparza">
-        <link rel="shortcut icon" href="../Others/Icon.png" type="image/x-icon">
+        <link rel="shortcut icon" href="./Others/Icon.png" type="image/x-icon">
         <link href="./CSS/Header.css" rel="stylesheet" media="all" type="text/css"/>
         <link href="./CSS/Products.css" rel="stylesheet" media="all" type="text/css"/>
     </head>

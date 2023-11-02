@@ -355,6 +355,7 @@ if(isset($tableName))
                         newRow.appendChild(newCell);
                     }
                     invertInputs(newRow.querySelectorAll("input"))
+                    addBorderColorNew(newRow);
                 }
             });
         }
@@ -370,6 +371,27 @@ if(isset($tableName))
 
         for (let i = 0; i < editButtons.length; i++) {
             addEventEdit(editButtons[i]);
+        }
+
+        function addBorderColorNew(newRow)
+        {
+            var inputs = newRow.querySelectorAll('input');
+
+
+            for (var i = 0; i < inputs.length; i++) {
+                var input = inputs[i];
+                if (
+                    tableName == "Products" &&
+                    input.type !== 'file' &&
+                    input.type !== 'hidden' &&
+                    (i !== 1 || input.type !== 'text')
+                ) {
+                    input.classList.add("newAdded");
+                } else if(i !== 0)
+                {
+                    input.classList.add("newAdded");
+                }
+            }
         }
 
         function addEventEdit(targetElement) 
@@ -423,7 +445,7 @@ if(isset($tableName))
                 if(tableName == "Products" && i > 1 || tableName != "Products" && i > 0)
                 {
                     if (i > 0)
-                    {   
+                    {
                         input.classList = "";
                         input.readOnly = input.readOnly ? false : true;
                         input.classList.add(input.readOnly ? "readOnly" : "editable");

@@ -105,12 +105,14 @@ $userName = $userData["first_name"];
                 </div>
                 <a href="./UserProfile.php"><img class="return" src="../Others/return.svg" alt=""></a>
             </form>
+            <span class="errorRegister"></span>
         </main>
     </body>
     <script>
         const returnButton = document.querySelector(".return");
         const passwordImg = document.querySelector(".passwordImg");
         const inputs = document.querySelectorAll(".dataInput input");
+        const form = document.querySelector("form");
 
         for(let i = 0; i < inputs.length; i++)
         {
@@ -133,5 +135,31 @@ $userName = $userData["first_name"];
                 passwordImg.src = "../Others/IconsEdit/lock.svg";
             }
         });
+
+        form.addEventListener("submit", function(e){
+            e.preventDefault();
+            const spanError = document.querySelector(".errorRegister");
+            const inputEmail = form[2];
+
+            if(correctEmail(inputEmail))
+            {
+                e.target.submit();
+            }
+            else
+            {
+                spanError.classList.add("show");
+                spanError.textContent = "Some fields are incorrect";
+            }
+        });
+
+        function correctEmail(emailInput) 
+        {
+            const email = emailInput.value;
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            const correct = emailRegex.test(email);
+            if(!correct) emailInput.parentElement.classList.add("error");
+            else emailInput.classList.remove("error");
+            return correct;
+        }
     </script>
 </html>
