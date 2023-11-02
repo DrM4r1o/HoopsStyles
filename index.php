@@ -121,7 +121,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
                     $noProducts = true;
                 }
             } else $products = $bd->query($queryProds);
-            $queryCateg = "SELECT category FROM categories";
+            $queryCateg = "SELECT * FROM Categories ORDER BY CASE WHEN category = 'No category' THEN 1 ELSE 0 END, category";
             $categories = $bd->query($queryCateg);
         ?>
         <main>

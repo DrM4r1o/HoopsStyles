@@ -28,3 +28,9 @@ function userIsComplete($userEmal, $bd)
 {
     return $bd->query("SELECT complete FROM users WHERE email = '{$userEmal}'")->fetch()["complete"];
 }
+
+function getProductsInCategory($categorySearch, $bd)
+{
+    $query = "SELECT id FROM products WHERE id IN (SELECT idProduct FROM product_category WHERE idCategory = (SELECT id FROM categories WHERE id = '{$categorySearch}'))";
+    return $bd->query($query)->fetchAll();
+}

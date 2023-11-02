@@ -99,7 +99,6 @@ a {
 }
 
 #sumbitRegister {
-    margin-top: 20px;
     margin-bottom: 11px;
 }
 
@@ -149,6 +148,7 @@ a {
 
 .forms > * {
     margin: 5px;
+    margin-bottom: 2px;
     width: 100%;
 }
 
@@ -182,6 +182,19 @@ a {
     justify-content: space-between;
     height: 62px;
     width: 100%;
+}
+
+.error {
+    border-color: red;
+}
+
+.errorRegister {
+    color: red;
+    font-size: 0.7rem;
+}
+
+.show {
+    display: block;
 }
 
 /* ------------------------------ */

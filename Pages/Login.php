@@ -10,6 +10,7 @@
     
     if ($_SERVER["REQUEST_METHOD"] === "POST")
     {
+        
         if(isset($_POST["submit-login"]))
         {   
             $queryData;
@@ -30,6 +31,7 @@
         }
         if(isset($_POST["submit-register"]))
         {   
+            echo "Hola";
             $error = true;
             $inputPass = $_POST["dni"];
             $inputEmail = $_POST["email"];
@@ -95,8 +97,9 @@
                             <h2>Register</h2>
                             <input class="register_user" type="text" label="Usuario" name="email" size="28.5" placeholder="Email"/>
                             <br><input class="register_user" type="text" label="DNI" name="dni" size="28.5" placeholder="DNI"/>
-                            <br><input class="register_user" type="password" name="password" size="28.5" placeholder="Passworrd">
-                            <br><input class="register_user" type="password" name="password-confirm" size="28.5" placeholder="Confirm password"/>
+                            <br><input class="register_user passRegister" type="password" name="password" size="28.5" placeholder="Passworrd">
+                            <br><input class="register_user passRegister" type="password" name="password-confirm" size="28.5" placeholder="Confirm password"/>
+                            <span class="hide errorRegister">The passwords doesn't match</span>
                             <br><input id="sumbitRegister" type="submit" name="submit-register" value="Confirm"/>
                             <hr>
                             <div class="changeLogin">
@@ -109,6 +112,29 @@
             </div>
         </main>
         <script>
+            const registerForm = document.querySelectorAll("form")[1];
+
+            registerForm.addEventListener("submit", function(e){
+                e.preventDefault();
+                const spanError = document.querySelector(".errorRegister");
+                const inputsPassword = document.querySelectorAll(".passRegister");
+
+                if(inputsPassword[0].value != inputsPassword[1].value)
+                {
+                    inputsPassword[0].classList.add("error");
+                    inputsPassword[1].classList.add("error");
+                    spanError.classList.add("show");
+                    spanError.classList.remove("hide");
+                }
+                else
+                {
+                    inputsPassword[0].classList.remove("error");
+                    inputsPassword[1].classList.remove("error");
+                    spanError.classList.add("hide");
+                    e.target.submit();
+                }
+            });
+
             document.addEventListener("animationend", animateAppear)
 
             document.getElementById("goRegister").addEventListener("click", function(e){

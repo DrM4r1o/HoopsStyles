@@ -4,6 +4,7 @@ session_start();
 
 include "../PHP/DataAccess.php";
 include "../PHP/Header.php";
+include "../PHP/Querys.php";
 
 
 if($_SESSION["rol"] != "Admin") header ("Location:./UserProfile.php");
@@ -30,8 +31,7 @@ if(isset($_POST["element"]))
     if ($tableName == "Users") $sum = 10;
 
     $i = 0;
-    do {      
-        print_r($_FILES["image"]["name"]);
+    do {
         $idProduct = "";
         $names = $bd->query("DESCRIBE {$tableName}")->fetchAll(PDO::FETCH_COLUMN);
         $queryUpdate = "UPDATE {$tableName} SET ";
@@ -55,11 +55,13 @@ if(isset($_POST["element"]))
             $bd->query("DELETE FROM product_category WHERE idProduct = '{$idProduct}' AND idCategory = '{$oldCategory["idCategory"]}'");
             $bd->query("INSERT INTO product_category VALUES('{$idCategory["id"]}', '{$idProduct}')");
 
-            if(isset($_FILES["image"]["name"][$i / $sum - 1]))
+            
+            $pos = $i / $sum - 1;
+            if($_FILES["image{$pos}"]["name"] != "")
             {
                 $nameCategory = $bd->query("SELECT category FROM categories WHERE id = '{$idCategory["id"]}'")->fetch()["category"];
-                $imageRoute = "./Products/{$nameCategory}/{$_FILES["image"]["name"][$i / $sum - 1]}";
-                move_uploaded_file(($_FILES["image"]["tmp_name"][$i / $sum - 1]), ".{$imageRoute}");
+                $imageRoute = "./Products/{$nameCategory}/{$_FILES["image{$pos}"]["name"]}";
+                move_uploaded_file(($_FILES["image{$pos}"]["tmp_name"]), ".{$imageRoute}");
                 $bd->query("UPDATE products SET image = '{$imageRoute}' WHERE id = '{$idProduct}'");
             }
         }
@@ -71,21 +73,47 @@ if(isset($_POST["newElement"]))
 {
     $i = 0;
     $sum = 0;
-    if ($tableName == "Categories") $sum = 2;
-    if ($tableName == "Products") $sum = 4;
-    if ($tableName == "Users") $sum = 10;
+    if($_POST["newElement"][0] != "")
+    {
+        if ($tableName == "Categories") $sum = 2;
+        if ($tableName == "Products") $sum = 5;
+        if ($tableName == "Users") $sum = 10;
 
-    do {
-        $queryInsert = "INSERT INTO $tableName VALUES(";
-        for ($j = 0; $j < $sum; $j++)
-        {
-            $queryInsert .= "'".$_POST["newElement"][$j]."'";
-            if ($i != $sum - 1) $queryInsert .= ",";
-            $i++;
-        }
-        $queryInsert .= ")";
-        $bd->query($queryInsert);
-    } while ($i < count($_POST["newElement"]));
+        $pos = 0;
+        do {
+            $category = "";
+            $queryInsert = "INSERT INTO $tableName VALUES(";
+            for ($j = 0; $j < $sum; $j++)
+            {
+                if($j == 0) $idProduct = $_POST["newElement"][$j];
+                if($tableName == "Products" && $j == $sum - 1) $category = $_POST["newElement"][$j];
+                else
+                {
+                    if($j != 3)
+                    {
+                        $queryInsert .= "'".$_POST["newElement"][$j]."'";
+                        if ($i != $sum - 1) $queryInsert .= ",";
+                    }
+                }
+                $i++;
+            }
+            if($tableName == "Products")
+            {
+                $imageRoute = "./Products/{$category}/{$_FILES["newImage{$pos}"]["name"]}";
+                move_uploaded_file(($_FILES["newImage{$pos}"]["tmp_name"]), ".{$imageRoute}");
+                $queryInsert .= "'{$imageRoute}'";
+            }
+            $queryInsert .= ")";
+            $bd->query($queryInsert);
+            if($tableName == "Products")
+            {
+                $idCategory = $bd->query("SELECT id FROM categories WHERE category = '{$category}'")->fetch()["id"];
+                $bd->query("INSERT INTO product_category VALUES('{$idCategory}', '{$idProduct}')");
+            }
+
+            $pos++;
+        } while ($i < count($_POST["newElement"]));
+    }
 }
 
 if(isset($_POST["remove"]))
@@ -94,8 +122,25 @@ if(isset($_POST["remove"]))
     $tableQuery = $tableName;
     if($tableName == "Categories" || $tableName == "Products") 
     {
-        if($tableName == "Categories") $tablePC = "Category";
-        if($tableName == "Products") $tablePC = "Product";
+        if($tableName == "Categories")
+        {
+            $noCategory = $bd->query("SELECT id FROM categories WHERE category = 'No category'")->fetch();
+            if($noCategory == "")
+            {
+                $bd->query("INSERT INTO categories VALUES((SELECT create_id('No category')),'No category')");
+                $noCategory = $bd->query("SELECT id FROM categories WHERE category = 'No category'")->fetch();
+            }
+            $productsInCategory = getProductsInCategory($_POST["remove"], $bd);
+            foreach ($productsInCategory as $product) {
+                $bd->query("INSERT INTO product_category VALUES('{$noCategory["id"]}', '{$product["id"]}')");
+            }
+            $tablePC = "Category";  
+        } 
+        if($tableName == "Products")
+        {
+            $tablePC = "Product";
+            $bd->query("DELETE FROM order_lines WHERE idProduct = '{$_POST["remove"]}'");
+        } 
         $bd->query("DELETE FROM product_category WHERE id{$tablePC} = '{$_POST["remove"]}'");
     }
     $queryDelete = "DELETE FROM $tableName WHERE id = '{$_POST["remove"]}'";
@@ -105,8 +150,12 @@ if(isset($_POST["remove"]))
 if(isset($tableName))
 {
     $query = "SELECT * FROM {$tableName}";
-    $data = $bd->query($query)->fetchAll(PDO::FETCH_ASSOC);
     $tableName = ucfirst($tableName);
+    if($tableName == "Categories")
+    {
+        $query = "SELECT * FROM {$tableName} WHERE category != 'No category'";
+    }
+    $data = $bd->query($query)->fetchAll(PDO::FETCH_ASSOC);
 }
 
 ?>
@@ -164,7 +213,7 @@ if(isset($tableName))
                         echo "<th class='editContainer'></th>";
                         echo "<th class='removeContainer removeTh'></th>";
                         echo "</tr>";
-                        foreach($data as $row)
+                        foreach($data as $num => $row )
                         {
                             echo "<tr>";
                             if($tableName == "Products")
@@ -172,7 +221,7 @@ if(isset($tableName))
                                 echo "
                                 <td class='imageContainer'>
                                     <img class='image' src='.{$row["image"]}' alt='productImage'>
-                                    <input type='file' id='changeImage' name='image' title=' ' accept='image/png, image/jpeg, i mage/webp' />
+                                    <input type='file' id='changeImage' name='image{$num}' title=' ' accept='image/png, image/jpeg, image/webp' />
                                 </td>   
                                 ";
                             }
@@ -228,6 +277,8 @@ if(isset($tableName))
         const returnButton = document.querySelector(".return");
         const buttonSubmit = document.querySelector("#submit");
         const inputImages = document.querySelectorAll("input[type=file]");
+        const tableName = "<?php if(isset($tableName)) {echo $tableName;} else {echo '';} ?>";
+        let newImage = 0;
         let editing = false;
 
         if(buttonSubmit != null)
@@ -280,23 +331,26 @@ if(isset($tableName))
                         {
                             const newInput = document.createElement("input");
                             newInput.type = "file";
-                            newInput.name = "image[]";
+                            newInput.name = `newImage${newImage}`;
                             newInput.title = " ";
                             newInput.accept = "image/png, image/jpeg, image/webp";
                             newCell.appendChild(newInput);
-                        }
-                        if(i == (table.rows[0].cells.length - 2))
+                            newImage++;
+                        } else
                         {
-                            newRow.appendChild(addElements("editContainer", ["edit", "save"], "../Others/save.svg", "edit", true));
-                            newCell = addElements("removeContainer", ["remove"], "../Others/trash.svg", "remove", false);
-                            editing = true;
-                            i++;
-                        } else {
-                            const newInput = document.createElement("input");
-                            newInput.type = "text";
-                            newInput.name = "newElement[]";
-                            newInput.setAttribute("readOnly", "false");
-                            newCell.appendChild(newInput);
+                            if(i == (table.rows[0].cells.length - 2))
+                            {
+                                newRow.appendChild(addElements("editContainer", ["edit", "save"], "../Others/save.svg", "edit", true));
+                                newCell = addElements("removeContainer", ["remove"], "../Others/trash.svg", "remove", false);
+                                editing = true;
+                                i++;
+                            } else {
+                                const newInput = document.createElement("input");
+                                newInput.type = "text";
+                                newInput.name = "newElement[]";
+                                newInput.setAttribute("readOnly", "false");
+                                newCell.appendChild(newInput);
+                            }
                         }
                         newRow.appendChild(newCell);
                     }
@@ -323,11 +377,13 @@ if(isset($tableName))
             targetElement.addEventListener("click", (e) => {
                 if(editing && e.target.classList.contains("save"))
                 {
+                    let valSelectInput = 0;
                     editing = false;
                     e.target.src = "../Others/edit.svg";
                     e.target.classList.remove("save");
-                    let elementName = e.target.parentElement.parentElement.querySelectorAll("input")[1];
-                    let elementHash = e.target.parentElement.parentElement.querySelectorAll("input")[0];
+                    if(tableName == "Products") valSelectInput = 1;
+                    let elementHash = e.target.parentElement.parentElement.querySelectorAll("input")[valSelectInput];
+                    let elementName = e.target.parentElement.parentElement.querySelectorAll("input")[valSelectInput + 1];
                     if(elementHash.value == "" && elementName.value != "")
                     {
                         let hash = sha256(elementName.value);
@@ -358,18 +414,20 @@ if(isset($tableName))
 
         function invertInputs(row)
         {
-            const tableName = "<?php if(isset($tableName)) {echo $tableName;} else {echo '';} ?>";
             if(tableName == "Products")
             {
                 <?php echo "invertOptionsProducts(row[0].parentElement.parentElement);"; ?>
             }
             for (let i = 0; i < row.length; i++) {
                 const input = row[i];
-                if (i > 0)
-                {   
-                    input.classList = "";
-                    input.readOnly = input.readOnly ? false : true;
-                    input.classList.add(input.readOnly ? "readOnly" : "editable");
+                if(tableName == "Products" && i > 1 || tableName != "Products" && i > 0)
+                {
+                    if (i > 0)
+                    {   
+                        input.classList = "";
+                        input.readOnly = input.readOnly ? false : true;
+                        input.classList.add(input.readOnly ? "readOnly" : "editable");
+                    }
                 }
             }
         }
