@@ -13,6 +13,7 @@ $userName = isset($_SESSION["name"]) ? $_SESSION["name"] : "";
 
 if(isset($_POST["edit"]))
 {
+    echo "entro";
     $actualPassword = $bd->query("SELECT password FROM users WHERE email = '{$userEmail}'")->fetch()["password"];
     if($_POST["user-pass"] === "") $_POST["user-pass"] = $actualPassword;
 
@@ -100,7 +101,8 @@ $userName = $userData["first_name"];
                             </div>
                             <img class="alert" src="../Others/IconsEdit/alert-triangle.svg" alt="name">
                         </div>
-                        <button class="confirm" type="submit" value="Confirm" name="edit">Confirm</button>
+                        <button class="confirm" type="submit">Confirm</button>
+                        <input type="hidden" name="edit" value="Confirm" name="edit">
                     </div>
                 </div>
                 <a href="./UserProfile.php"><img class="return" src="../Others/return.svg" alt=""></a>

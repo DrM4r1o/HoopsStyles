@@ -126,20 +126,4 @@ $resultLastOrders = $bd->query($queryLastOrders)->fetchAll();
             </div>
         </main>
     </body>
-    <script>
-        const edit = document.getElementById("edit");
-        const admin = document.getElementById("admin");
-        const buttons = [edit, admin];
-        buttons.forEach(button => {
-            button.addEventListener("click", () => {
-                if(button.value == "Complete your profile" || button.value == "Edit Profile")
-                {
-                    window.navigation.navigate("EditProfile.php");
-                } else if(button.value == "Admin page")
-                {
-                    window.navigation.navigate("AdminPage.php");
-                }
-            });
-        });
-    </script>
 </html>
