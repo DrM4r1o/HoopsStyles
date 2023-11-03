@@ -66,6 +66,16 @@ if(isset($_POST["element"]))
             }
         }
 
+        if($tableName == "Categories")
+        {
+            $nameCategory = $bd->query("SELECT category FROM categories WHERE id = '{$idProduct}'")->fetch()["category"];
+            $dirPath = "../Products/".$nameCategory."/";
+
+            if (!file_exists($dirPath)) {
+                mkdir($dirPath, 0777, true);
+            }
+        }
+
     } while ($i < count($_POST["element"]));
 }
 

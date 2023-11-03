@@ -205,7 +205,7 @@
                 const confirmPassword = confirmPasswordInput.value;
                 let correct = false;
 
-                if(password.value != confirmPassword.value || password.value == "" || confirmPassword.value == "")
+                if(password != confirmPassword || password == "" || confirmPassword == "")
                 {
                     passwordInput.classList.add("error");
                     confirmPasswordInput.classList.add("error");
@@ -243,6 +243,11 @@
                     {
                         dniInput.classList.remove("error");
                     }
+                } 
+                else 
+                {
+                    dniInput.classList.add("error");
+                    correct = false;
                 }
 
                 return correct;

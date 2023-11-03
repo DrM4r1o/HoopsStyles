@@ -159,7 +159,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
                         foreach ($products as $i=>$product) {
                                 echo "<div class='product'>";
                                 echo "    <img src='".$product["image"]."' alt='product'/>";
-                                echo "    <span class='name'>".implode(" ",explode("-",substr($product["name"], 0 ,strpos($product["name"], "."))))."</span>";
+                                if(implode(" ",explode("-",substr($product["name"], 0 ,strpos($product["name"], ".")))) == "")
+                                {
+                                    echo "    <span class='name'>".$product["name"]."</span>";
+                                } 
+                                else
+                                {
+                                    echo "    <span class='name'>".implode(" ",explode("-",substr($product["name"], 0 ,strpos($product["name"], "."))))."</span>";
+                                }
                                 echo "    <span class='price'>".$product["unit_price"]."€</span>";
                                 echo "    <div>";
                                 echo "        <button class='addToCart' type='submit' name='productId' value='".$product["id"]."'>Add to cart</button>";
