@@ -1,14 +1,14 @@
 # HoopsStyles
 
-# Introducción
+## Introducción
 
 Bienvenido a la documentación del proyecto "HoopsStyles," una tienda de ropa en línea que está diseñada para satisfacer las necesidades de los amantes del baloncesto. En esta documentación, exploraremos la estructura, tecnologías y funcionalidades clave de esta plataforma en línea, que combina moda y estilo con la pasión por el baloncesto.
 
-## Descripción del Proyecto
+### Descripción del Proyecto
 
 "HoopsStyles" es una tienda virtual dedicada a ofrecer una amplia gama de ropa y accesorios de moda diseñados específicamente para jugadores de baloncesto y aficionados a este emocionante deporte. Nuestra plataforma proporciona a los usuarios la oportunidad de adquirir productos de alta calidad que les permitan expresar su amor por el baloncesto a través de la moda. Ya sea que estés buscando camisetas, zapatillas, sudaderas o cualquier otro artículo relacionado con el baloncesto, "HoopsStyles" tiene algo para todos.
 
-## Tecnologías Utilizadas
+### Tecnologías Utilizadas
 
 Para llevar a cabo este proyecto, hemos utilizado un conjunto de tecnologías conocido como XAMPP, que incluye las siguientes componentes:
 
@@ -17,7 +17,7 @@ Para llevar a cabo este proyecto, hemos utilizado un conjunto de tecnologías co
 - **PHP**: El lenguaje de programación PHP se utiliza para crear las páginas web dinámicas y gestionar las interacciones con la base de datos, permitiendo a los usuarios buscar, explorar y comprar productos de manera eficaz.
 - **CSS y JavaScript**: Para el diseño y la experiencia de usuario, hemos empleado CSS para la maquetación y estilos, mientras que JavaScript se utiliza en el frontend para crear interacciones dinámicas y mejorar la usabilidad de la tienda.
 
-## Objetivos del Proyecto
+### Objetivos del Proyecto
 
 El objetivo principal de "HoopsStyles" es proporcionar a los amantes del baloncesto una plataforma en línea donde puedan encontrar productos de moda que reflejen su pasión por el deporte. Entre los objetivos específicos del proyecto se incluyen:
 
@@ -29,7 +29,7 @@ El objetivo principal de "HoopsStyles" es proporcionar a los amantes del balonce
 
 En esta documentación, exploraremos cada uno de estos aspectos en detalle, desde la arquitectura tecnológica hasta las funcionalidades clave.
 
-## **Esquema de la Base de Datos**
+### **Esquema de la Base de Datos**
 
 A continuación, se presenta el esquema de la base de datos de "HoopsStyles". Este esquema ilustra la estructura interna de la base de datos utilizada para almacenar y gestionar la información relacionada con los usuarios, los productos y los pedidos en nuestra tienda en línea. El esquema proporciona una representación visual de las tablas y las relaciones clave que sustentan el funcionamiento de la plataforma, permitiendo una comprensión más profunda de cómo se almacenan y se relacionan los datos internamente.
 
